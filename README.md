@@ -4,7 +4,17 @@ Interface gráfica para [PaperQA2](https://github.com/Future-House/paper-qa) usa
 
 O **mesmo** `app.py` roda no Windows 11 e no Deepin. Só o jeito de instalar muda.
 
-## MVP para apresentação (Windows + Docker)
+## Levar no pendrive → PC Windows 11 (i7 + SSD)
+
+Para a viagem: **Python + Ollama no SSD do Windows**. Instalar os dois não é problema e é mais simples que Docker nesse cenário.
+
+Guia passo a passo: **[INSTALAR-WINDOWS.md](INSTALAR-WINDOWS.md)**
+
+Resumo: copie `paperqa-gui-local` para `C:\paperqa-gui-local` (não rode no pendrive) → Python 3.12 → Ollama → `install-windows.bat` → `ollama pull qwen3.5:4b` → `streamlit run app.py`.
+
+## MVP opcional: Windows + Docker
+
+Docker **não deixa o LLM mais rápido**. Só vale se você quiser empacotar “um comando” depois. Nesta viagem, pode ignorar.
 
 Docker **não deixa o LLM mais rápido**. O gargalo é o modelo (CPU/GPU), não o Python. Docker resolve outra coisa: **empacotar o produto** (`docker compose up`) no notebook Windows da empresa, sem venv, sem pendrive exFAT, sem “funciona na minha máquina”.
 
