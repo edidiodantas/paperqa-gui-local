@@ -170,9 +170,14 @@ def run_async(coro):
 # UI
 # ---------------------------------------------------------------------------
 st.set_page_config(
-    page_title="PaperQA2 Local (Ollama)",
+    page_title="PaperQA2 — IA local",
     page_icon="📄",
     layout="wide",
+    menu_items={
+        "Get help": None,
+        "Report a bug": None,
+        "About": "PaperQA2 local (Ollama). Sem OpenAI. Perguntas só sobre os PDFs enviados.",
+    },
 )
 
 init_session_state()
@@ -199,13 +204,13 @@ with st.sidebar:
         - **PDFs**: `{PDF_DIR}`
         - **PQA_HOME**: `{PQA_HOME}`
 
-        Troque o modelo no `.env` (`OLLAMA_MODEL`) para
+        Troque o modelo no arquivo `.env` (`OLLAMA_MODEL`) para
         `qwen3.5:4b` ou `qwen3.5:2b` se estiver lento demais.
         """
     )
     st.warning(
-        "Com RTX 6GB + 8GB RAM, o 9B fará offload para RAM. "
-        "Espere ~1–2 min por resposta. Isso é normal."
+        "A primeira resposta pode levar alguns minutos (carga do modelo). "
+        "Não feche a aba. Isso é normal em PC local."
     )
     if st.button("Limpar Sessão", type="secondary", use_container_width=True):
         st.session_state.docs = Docs()
@@ -214,12 +219,13 @@ with st.sidebar:
         st.success("Sessão limpa.")
         st.rerun()
 
-# --- Upload ---
-st.subheader("1. Upload de PDFs")
+# --- Enviar PDFs ---
+st.subheader("1. Enviar PDFs")
 uploaded = st.file_uploader(
     "Selecione um ou mais PDFs",
     type=["pdf"],
     accept_multiple_files=True,
+    help="Apenas arquivos PDF. Cada um é lido e indexado nesta sessão.",
 )
 
 if uploaded:
@@ -314,7 +320,7 @@ if session is not None:
                     citation = ctx.text.name
                 st.markdown(
                     f"**Fonte {i}**"
-                    + (f" (score: {score})" if score is not None else "")
+                    + (f" (relevância: {score})" if score is not None else "")
                 )
                 if citation:
                     st.caption(citation)

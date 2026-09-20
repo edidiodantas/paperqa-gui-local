@@ -1,0 +1,129 @@
+PAPERQA2 — IA LOCAL (OLLAMA)
+================================
+Interface grafica do programa (Streamlit).
+E a mesma tela em Windows e no Linux.
+
+Sim: a tela ao lado e esta.
+Titulo:  PaperQA2 — IA Local (Ollama)
+Idioma:  textos nossos em portugues.
+         Dois botoes do Streamlit podem ficar em ingles
+         ("Browse files" / menu). Nao mudam o uso.
+
+
+O QUE O PROGRAMA FAZ
+--------------------
+Voce envia PDFs, pergunta em portugues, e a IA local
+responde COM BASE NOS ARQUIVOS, com citacoes.
+Nao usa OpenAI. Nao envia documento para a nuvem.
+
+
+BARRA SUPERIOR (status)
+-----------------------
+Linha cinza: modelo, embeddings e endereco do Ollama.
+
+Faixa verde:  Ollama ok e o modelo do .env esta instalado.
+Faixa vermelha: Ollama desligado ou modelo errado.
+  -> abra o Ollama e rode:  ollama pull qwen3.5:4b
+
+
+BARRA LATERAL ESQUERDA — Configuracao
+-------------------------------------
+So informacao (nao e formulario).
+
+- LLM / summary / agent / enrichment
+    Os 4 papeis de IA, todos no Ollama local.
+- Embeddings
+    Busca de trechos no PDF (modelo pequeno, local).
+- PDFs
+    Pasta onde os arquivos enviados sao gravados.
+- PQA_HOME
+    Pasta do indice interno.
+
+Aviso amarelo: a 1a resposta pode demorar. Nao feche a aba.
+
+BOTAO "Limpar Sessao"
+  Apaga da memoria os PDFs ja indexados e a ultima resposta.
+  Os arquivos na pasta documentos/ continuam no disco.
+  Use para comecar de novo.
+
+
+1. ENVIAR PDFS
+--------------
+Botao de envio (pode aparecer "Browse files" em ingles).
+Aceita um ou varios PDF.
+
+O que acontece ao enviar:
+  1. Salva o arquivo na pasta documentos
+  2. Extrai o texto
+  3. Gera embeddings locais
+  4. Pede metadados ao Ollama (lento)
+
+Mensagens:
+  "Ja indexado: nome.pdf"     — nao processa de novo nesta sessao
+  "Indexado: nome.pdf"        — pronto para perguntar
+  "Falha: ..."                — erro (PDF danificado, Ollama, etc.)
+  "Documentos na sessao: ..." — lista do que vale para as perguntas
+  "Nenhum PDF indexado ainda."
+
+
+2. PERGUNTA
+-----------
+Caixa de texto: escreva em portugues.
+Exemplo: Quais sao as principais conclusoes do artigo?
+
+BOTAO "Perguntar"
+  Fica cinza (desligado) se:
+    - nao ha PDF indexado, ou
+    - a caixa esta vazia, ou
+    - o Ollama nao esta ok
+
+  Ao clicar (nao feche a aba):
+    1. Busca trechos relevantes nos PDFs
+    2. Resume cada trecho (summary)
+    3. Monta a resposta final com citacoes
+
+  Pode levar 1 a 3 minutos (ou mais na 1a vez).
+
+
+3. RESPOSTA
+-----------
+So aparece depois de uma pergunta com sucesso.
+
+Texto principal: resposta da IA, em geral com citacoes.
+
+BOTAO/AREA "Mostrar Fontes"
+  Abre os trechos usados (Fonte 1, Fonte 2, ...).
+  "relevancia" = quao util aquele trecho foi.
+  Se nao houver lista, pode mostrar so as referencias
+  ou "Nenhuma fonte estruturada retornada."
+
+
+O QUE ESTE PROGRAMA NAO FAZ
+---------------------------
+- Nao traduz PDF sozinho (pergunta em PT sobre texto em PT ou EN).
+- Nao edita o PDF.
+- Nao busca na internet.
+- Nao grava historico de perguntas depois de "Limpar Sessao"
+  ou de fechar o navegador.
+- Nao usa chave OpenAI.
+
+
+ORDEM DE USO (resumo)
+---------------------
+1. Ollama aberto  (localhost:11434)
+2. streamlit run app.py
+3. Abrir http://localhost:8501
+4. Enviar PDF  -> esperar indexar
+5. Perguntar   -> esperar resposta
+6. Abrir "Mostrar Fontes" se quiser conferir
+7. Limpar Sessao para outro conjunto de PDFs
+
+
+TROCAR O MODELO
+---------------
+Nao e botao na tela. Edite o arquivo .env:
+
+  OLLAMA_MODEL=qwen3.5:4b
+
+Depois: ollama pull qwen3.5:4b
+e reinicie o Streamlit.
