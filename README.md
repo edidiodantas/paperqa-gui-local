@@ -4,6 +4,50 @@ Interface gráfica para [PaperQA2](https://github.com/Future-House/paper-qa) usa
 
 O **mesmo** `app.py` roda no Windows 11 e no Deepin. Só o jeito de instalar muda.
 
+## MVP para apresentação (Windows + Docker)
+
+Docker **não deixa o LLM mais rápido**. O gargalo é o modelo (CPU/GPU), não o Python. Docker resolve outra coisa: **empacotar o produto** (`docker compose up`) no notebook Windows da empresa, sem venv, sem pendrive exFAT, sem “funciona na minha máquina”.
+
+Para captação / demo em empresa 100% Windows, o caminho recomendado é este.
+
+### No notebook da apresentação (na véspera, não na hora)
+
+1. Instale [Docker Desktop](https://www.docker.com/products/docker-desktop/) (WSL2 ligado).
+2. Clone o repo **privado** e suba:
+
+```bat
+git clone https://github.com/edidiodantas/paperqa-gui-local.git
+cd paperqa-gui-local
+docker compose up --build
+```
+
+3. Na **primeira** subida o container baixa `qwen3.5:4b` (~3,4 GB) e as imagens. Deixe terminar.
+4. Abra http://localhost:8501
+5. Ensaie com **um** PDF curto. Grave um vídeo de backup (demo ao vivo de LLM falha).
+
+Pare: `Ctrl+C` ou `docker compose down`. Os modelos ficam no volume Docker (não precisa baixar de novo).
+
+Modelo padrão no Compose: `qwen3.5:4b` (cabe em notebook de 16 GB). Não use 9B na reunião.
+
+GPU NVIDIA no Docker (Linux/WSL2) é extra e frágil em TI corporativa:
+
+```bat
+docker compose -f docker-compose.yml -f docker-compose.gpu.yml up --build
+```
+
+**Não use Docker nesta máquina Deepin para “testar o produto”** se quiser manter o SSD livre: as imagens vão para `/var/lib/docker` (~vários GB). Construa no Windows da demo.
+
+### O que Docker melhora vs o que não melhora
+
+| Melhora (produto) | Não melhora (performance) |
+| --- | --- |
+| Um comando no Windows | Tokens/s do Qwen |
+| Mesmo ambiente na escola e no investidor | Tempo da 1ª carga (~minutos) |
+| Sem Python/Ollama “na mão” | Precisa de RAM (16 GB+) e disco |
+| História de LGPD: dados no PC, sem OpenAI | GPU antiga / Docker Desktop sem CUDA |
+
+Se o notebook da empresa **bloquear Docker**, o plano B continua sendo Ollama nativo + `streamlit run app.py` (seções Windows abaixo).
+
 ## Hardware alvo
 
 - **Windows 11:** i7, 8 GB RAM, RTX ~6 GB VRAM → `qwen3.5:9b` (ou 4b se lento)
