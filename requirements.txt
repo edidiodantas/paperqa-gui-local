@@ -1,10 +1,10 @@
 streamlit
 python-dotenv
-"paper-qa[local,pymupdf]>=5"
+paper-qa[local,pymupdf]>=5
 pymupdf
 aiohttp
 anyio
-"fhaviary[llm]"
+fhaviary[llm]
 html2text
 httpx
 litellm
