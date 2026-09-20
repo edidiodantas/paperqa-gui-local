@@ -2,12 +2,25 @@
 
 Interface gráfica para [PaperQA2](https://github.com/Future-House/paper-qa) usando **somente IA local via Ollama** — custo zero, sem OpenAI.
 
+O **mesmo** `app.py` roda no Windows 11 e no Deepin. Só o jeito de instalar muda.
+
 ## Hardware alvo
 
-- Linux ou Windows 11
-- i7, 8 GB RAM, RTX ~6 GB VRAM
-- Modelo sugerido: `qwen3.5:9b` (offload VRAM→RAM; lento, mas funcional)
-- Alternativas mais rápidas: `qwen3.5:4b` ou `qwen3.5:2b` no `.env`
+- **Windows 11:** i7, 8 GB RAM, RTX ~6 GB VRAM → `qwen3.5:9b` (ou 4b se lento)
+- **Deepin 23.1 (este PC):** Ryzen 5 4500, 16 GB RAM, GTX 750 4 GB → use `qwen3.5:4b` (GPU antiga, tende a CPU)
+- Alternativa ainda mais leve: `qwen3.5:2b` no `.env`
+
+## Instalar no Deepin 23 (pendrive, sem SSD)
+
+Não instale venv/modelos no SSD nem no exFAT nativo. Guia completo: **[INSTALAR-DEEPIN.md](INSTALAR-DEEPIN.md)**.
+
+Quando for a hora:
+
+```bash
+cd /media/Edidio/8662-B449/paperqa-gui-local
+bash scripts/setup-deepin.sh
+bash scripts/rodar-deepin.sh
+```
 
 ## Por que `llm="ollama/..."` sozinho não basta
 
@@ -43,7 +56,11 @@ ollama run qwen3.5:9b "Olá"
 
 Deixe o Ollama rodando (`http://localhost:11434`).
 
-## 2. Ambiente Python 3.11+
+No **Deepin / pendrive** pule as seções 2–3 abaixo e use [INSTALAR-DEEPIN.md](INSTALAR-DEEPIN.md).
+
+## 2. Ambiente Python 3.11+ (Windows / disco NTFS ou ext4)
+
+Não crie `.venv` em pendrive **exFAT**. No Windows, clone para o HD/SSD NTFS.
 
 ```bash
 git clone https://github.com/edidiodantas/paperqa-gui-local.git
@@ -52,14 +69,12 @@ python3 -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
 python -m pip install --upgrade pip
 pip install -r requirements.txt
-cp .env.example .env
+copy .env.example .env      # Linux: cp .env.example .env
 ```
 
 `paper-qa[local,pymupdf]` instala sentence-transformers (embeddings locais) e o parser PDF.
 
 Edite `.env` se quiser trocar o modelo (ex.: `OLLAMA_MODEL=qwen3.5:4b`).
-
-> Não crie o `.venv` em pendrive formatado como exFAT. Clone o repositório para um disco ext4/NTFS (SSD/HD do PC de destino).
 
 ## 3. Rodar a interface
 

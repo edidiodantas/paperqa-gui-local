@@ -32,16 +32,24 @@ from paperqa.settings import (
 # ---------------------------------------------------------------------------
 # Ambiente
 # ---------------------------------------------------------------------------
-load_dotenv()
+ROOT = Path(__file__).resolve().parent
+load_dotenv(ROOT / ".env")
 
 # Evita fallback acidental para a API paga se a chave existir no shell.
 os.environ.pop("OPENAI_API_KEY", None)
 
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen3.5:9b")
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434").rstrip("/")
-PDF_DIR = Path(os.getenv("PDF_DIR", "./documentos"))
-PQA_HOME = Path(os.getenv("PQA_HOME", "./.pqa"))
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "st-multi-qa-MiniLM-L6-cos-v1")
+
+
+def _path_from_env(key: str, default: str) -> Path:
+    raw = Path(os.getenv(key, default))
+    return raw if raw.is_absolute() else (ROOT / raw)
+
+
+PDF_DIR = _path_from_env("PDF_DIR", "./documentos")
+PQA_HOME = _path_from_env("PQA_HOME", "./.pqa")
 
 # LiteLLM usa o prefixo "ollama/" + nome do modelo no Ollama
 LLM_NAME = f"ollama/{OLLAMA_MODEL}"

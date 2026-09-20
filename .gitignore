@@ -4,6 +4,8 @@ venv/
 documentos/*
 !documentos/.gitkeep
 .pqa/
+linux-env/
+linux-env.img
 __pycache__/
 *.py[cod]
 *$py.class
