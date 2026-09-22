@@ -3,7 +3,7 @@ setlocal EnableExtensions
 cd /d "%~dp0"
 
 echo.
-echo === PaperQA2 GUI · instalacao Windows ===
+echo === AcervoQA · instalacao Windows ===
 echo Pasta: %CD%
 echo.
 
@@ -67,7 +67,7 @@ echo.
 echo Pronto. Agora:
 echo   1. Instale o Ollama e rode:  ollama pull qwen3.5:4b
 echo   2. Edite o .env: CONTACT_EMAIL=seu.email@escola.edu.br
-echo      ^(e-mail real da escola; nao e login do aluno^)
+echo      ^(e-mail real; nao e login de usuario^)
 echo   3. Rode:  rodar-windows.bat
 echo      ou:    .venv\Scripts\activate
 echo             streamlit run app.py

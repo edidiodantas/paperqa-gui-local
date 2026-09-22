@@ -1,4 +1,4 @@
-"""Busca acadêmica pública (sem login do aluno).
+"""Busca acadêmica pública (sem login).
 
 Oasisbr (IBICT): busca brasileira (artigos, teses, repositórios) — API VuFind grátis.
 Semantic Scholar / Crossref: fallback internacional.
@@ -206,8 +206,6 @@ def search_oasisbr(query: str, *, limit: int = 8) -> list[PaperHit]:
         )
         doi = _first_doi(*urls, blob)
         pid = _scielo_pid(blob, doi)
-        if pid and not doi:
-            doi = f"10.1590/{pid}"
         if pid and not doi:
             doi = f"10.1590/{pid}"
         pdf_url = ""

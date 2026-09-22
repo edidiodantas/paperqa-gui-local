@@ -1,10 +1,11 @@
-PAPERQA2 — IA LOCAL (OLLAMA)
-================================
+ACERVOQA
+========
 Interface grafica do programa (Streamlit).
 E a mesma tela em Windows e no Linux.
 
 Sim: a tela ao lado e esta.
-Titulo:  PaperQA2 — IA Local (Ollama)
+Titulo:  AcervoQA
+         Pesquisa e leitura de artigos cientificos no seu computador.
 Idioma:  textos nossos em portugues.
          Dois botoes do Streamlit podem ficar em ingles
          ("Browse files" / menu). Nao mudam o uso.
@@ -72,7 +73,7 @@ Usa o Oasisbr (IBICT) — API publica, sem chave, sem login.
 Reune SciELO, repositorios e periodicos brasileiros.
 Se o Oasisbr falhar, tenta Semantic Scholar e Crossref.
 Unpaywall so entra para achar PDF livre (pelo DOI).
-Nao precisa de conta do aluno — so CONTACT_EMAIL da escola no .env.
+Nao precisa de conta de usuario — so CONTACT_EMAIL no .env.
 
 Caixa "Tema ou titulo" + botao Buscar.
 Lista os artigos; o botao de baixar so liga se houver PDF aberto.

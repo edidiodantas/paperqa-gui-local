@@ -1,9 +1,9 @@
-# Instalar no Windows 11 (i7 + SSD) a partir do pendrive
+# Instalar o AcervoQA no Windows 11 (i7 + SSD) a partir do pendrive
 
 Este é o caminho certo para o PC da apresentação: **Python + Ollama nativos no SSD**.  
 Não rode o projeto de dentro do pendrive (ele está em exFAT; o `.venv` quebra).
 
-O programa é o **mesmo** do Linux: `app.py` + `academic_search.py` (Oasisbr, SciELO, Unpaywall). Só muda a instalação.
+O **AcervoQA** é o **mesmo** programa do Linux: `app.py` + `academic_search.py` (Oasisbr, SciELO, Unpaywall). Só muda a instalação. Na tela o título é **AcervoQA**.
 
 ## 0. Copiar para o SSD
 
@@ -60,7 +60,7 @@ OLLAMA_MODEL=qwen3.5:4b
 CONTACT_EMAIL=seu.email@escola.edu.br
 ```
 
-O e-mail é o contato exigido pelo Unpaywall (PDF aberto). Não é conta de aluno.
+O e-mail é o contato exigido pelo Unpaywall (PDF aberto). Não é login de usuário.
 
 ## 4. Rodar
 
@@ -101,3 +101,19 @@ Textos da tela: [FUNCOES.txt](FUNCOES.txt).
 - Não comece a demo com o modelo 9B sem ter ensaiado
 - Não rode com o `.env` do Linux (`PQA_HOME=/media/...`)
 - Grave um vídeo de backup da tela funcionando
+
+## 6. Reinstalar por cima da versão antiga (Windows)
+
+**Não** desinstale Python nem Ollama. O que costuma quebrar é misturar pasta velha com pasta nova.
+
+1. Feche o CMD do AcervoQA (janela preta) e o navegador nessa aba.
+2. Renomeie a pasta antiga, por exemplo:
+   - `Desktop\paperqa-gui-local` → `Desktop\paperqa-gui-local-OLD`
+3. Copie do pendrive a pasta **inteira** `paperqa-gui-local` para o mesmo lugar (Área de trabalho ou `C:\`).
+4. Na pasta **nova**, rode `install-windows.bat` (cria `.venv` limpo).
+5. Abra o `.env` novo e cole o `CONTACT_EMAIL` que já estava no `.env` da pasta `-OLD`.
+6. Ollama aberto → `rodar-windows.bat`.
+7. Recrie o atalho apontando para o **novo** `rodar-windows.bat`.
+8. Quando a tela **AcervoQA** abrir, apague a pasta `-OLD`.
+
+Não copie a pasta do pendrive **para dentro** da pasta antiga (fica `paperqa-gui-local\paperqa-gui-local`). Apague ou renomeie a antiga primeiro.

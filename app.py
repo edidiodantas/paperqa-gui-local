@@ -1,5 +1,6 @@
 """
-PaperQA2 + Streamlit + Ollama (100% local, custo zero).
+AcervoQA — pesquisa e leitura de artigos científicos no PC
+(PaperQA2 + Streamlit + Ollama, 100% local, custo zero).
 
 Importante:
 - Configure llm, summary_llm, agent_llm E enrichment_llm para ollama/...
@@ -183,13 +184,13 @@ def run_async(coro):
 # UI
 # ---------------------------------------------------------------------------
 st.set_page_config(
-    page_title="PaperQA2 — IA local",
+    page_title="AcervoQA",
     page_icon="📄",
     layout="wide",
     menu_items={
         "Get help": None,
         "Report a bug": None,
-        "About": "PaperQA2 local (Ollama). Busca só artigos em acesso aberto; a leitura é no PC.",
+        "About": "AcervoQA — pesquisa e leitura de artigos científicos no PC (IA local, Ollama).",
     },
 )
 
@@ -197,7 +198,8 @@ init_session_state()
 settings = get_settings()
 ollama_ok, ollama_msg = ollama_status()
 
-st.title("PaperQA2 — IA Local (Ollama)")
+st.title("AcervoQA")
+st.caption("Pesquisa e leitura de artigos científicos no seu computador.")
 st.caption(
     f"Modelo: `{OLLAMA_MODEL}` · Embeddings: `{EMBEDDING_MODEL}` · "
     f"Ollama: `{OLLAMA_BASE_URL}`"
@@ -277,7 +279,7 @@ else:
 # --- Busca acadêmica (acesso aberto) ---
 st.subheader("2. Buscar artigos (acesso aberto)")
 st.caption(
-    "O aluno **não** faz login. A busca começa no **Oasisbr (IBICT)**, que reúne SciELO, "
+    "Não há login. A busca começa no **Oasisbr (IBICT)**, que reúne SciELO, "
     "repositórios e periódicos brasileiros. Se o Oasisbr falhar, usa Semantic Scholar/Crossref. "
     "Unpaywall só entra para achar PDF **aberto**. Paywall não é baixado."
 )

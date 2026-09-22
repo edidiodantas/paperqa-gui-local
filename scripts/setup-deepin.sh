@@ -8,7 +8,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/config.sh"
 cd "$PROJECT_ROOT"
 
-echo "== PaperQA2 GUI · setup Deepin =="
+echo "== AcervoQA · setup Deepin =="
 echo "Projeto: $PROJECT_ROOT"
 echo "Volume Linux: $IMG  (${IMG_SIZE_GB}G, ext4, no pendrive)"
 echo

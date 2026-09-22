@@ -1,4 +1,6 @@
-# PaperQA2 GUI Local (Ollama + Streamlit)
+# AcervoQA
+
+Pesquisa e leitura de artigos científicos no seu computador.
 
 Interface gráfica para [PaperQA2](https://github.com/Future-House/paper-qa) usando **somente IA local via Ollama** — custo zero, sem OpenAI.
 
@@ -105,7 +107,7 @@ Abra o URL local (geralmente http://localhost:8501).
 4. Veja a resposta com citações e abra **Mostrar Fontes**.
 5. Use **Limpar Sessão** na barra lateral para recomeçar.
 
-A busca acadêmica **não pede login do aluno**. Começa no **Oasisbr (IBICT)** — API pública e grátis, com SciELO e repositórios brasileiros. Se o Oasisbr falhar, usa Semantic Scholar/Crossref. O Unpaywall só entra para PDF em acesso aberto. No `.env`: `CONTACT_EMAIL` da escola. Paywall não é baixado. Se não houver PDF aberto, baixe no site da revista e envie na seção 1.
+A busca acadêmica **não pede login**. Começa no **Oasisbr (IBICT)** — API pública e grátis, com SciELO e repositórios brasileiros. Se o Oasisbr falhar, usa Semantic Scholar/Crossref. O Unpaywall só entra para PDF em acesso aberto. No `.env`: `CONTACT_EMAIL`. Paywall não é baixado. Se não houver PDF aberto, baixe no site da revista e envie na seção 1.
 
 ## Latência esperada
 

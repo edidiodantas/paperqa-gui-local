@@ -1,6 +1,6 @@
-# Instalação no Deepin 23.1 (este PC)
+# Instalação do AcervoQA no Deepin 23.1 (este PC)
 
-O programa é o **mesmo** `app.py` do Windows. Aqui só muda *onde* instalar, para **não usar o SSD**.
+O **AcervoQA** é o **mesmo** `app.py` do Windows. Aqui só muda *onde* instalar, para **não usar o SSD**.
 
 Detectado neste Deepin:
 

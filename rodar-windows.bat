@@ -12,7 +12,7 @@ if not exist "academic_search.py" (
 )
 
 call .venv\Scripts\activate.bat
-echo Ollama precisa estar aberto ^(localhost:11434^).
+echo AcervoQA — Ollama precisa estar aberto ^(localhost:11434^).
 echo Abrindo http://localhost:8501 ...
 streamlit run app.py
 endlocal
