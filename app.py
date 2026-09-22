@@ -29,6 +29,13 @@ from paperqa.settings import (
     ParsingSettings,
 )
 
+from academic_search import (
+    download_pdf,
+    resolve_pdf_url,
+    search_academic,
+    _safe_filename,
+)
+
 # ---------------------------------------------------------------------------
 # Ambiente
 # ---------------------------------------------------------------------------
@@ -50,6 +57,8 @@ def _path_from_env(key: str, default: str) -> Path:
 
 PDF_DIR = _path_from_env("PDF_DIR", "./documentos")
 PQA_HOME = _path_from_env("PQA_HOME", "./.pqa")
+CONTACT_EMAIL = os.getenv("CONTACT_EMAIL", "").strip()
+S2_API_KEY = os.getenv("SEMANTIC_SCHOLAR_API_KEY", "").strip()
 
 # LiteLLM usa o prefixo "ollama/" + nome do modelo no Ollama
 LLM_NAME = f"ollama/{OLLAMA_MODEL}"
@@ -142,6 +151,10 @@ def init_session_state() -> None:
         st.session_state.docs = Docs()
     if "indexed_files" not in st.session_state:
         st.session_state.indexed_files = set()
+    if "search_hits" not in st.session_state:
+        st.session_state.search_hits = []
+    if "search_note" not in st.session_state:
+        st.session_state.search_note = ""
     if "last_answer" not in st.session_state:
         st.session_state.last_answer = None
 
@@ -176,7 +189,7 @@ st.set_page_config(
     menu_items={
         "Get help": None,
         "Report a bug": None,
-        "About": "PaperQA2 local (Ollama). Sem OpenAI. Perguntas só sobre os PDFs enviados.",
+        "About": "PaperQA2 local (Ollama). Busca só artigos em acesso aberto; a leitura é no PC.",
     },
 )
 
@@ -215,6 +228,8 @@ with st.sidebar:
     if st.button("Limpar Sessão", type="secondary", use_container_width=True):
         st.session_state.docs = Docs()
         st.session_state.indexed_files = set()
+        st.session_state.search_hits = []
+        st.session_state.search_note = ""
         st.session_state.last_answer = None
         st.success("Sessão limpa.")
         st.rerun()
@@ -259,8 +274,99 @@ if st.session_state.indexed_files:
 else:
     st.info("Nenhum PDF indexado ainda.")
 
+# --- Busca acadêmica (acesso aberto) ---
+st.subheader("2. Buscar artigos (acesso aberto)")
+st.caption(
+    "O aluno **não** faz login. A busca começa no **Oasisbr (IBICT)**, que reúne SciELO, "
+    "repositórios e periódicos brasileiros. Se o Oasisbr falhar, usa Semantic Scholar/Crossref. "
+    "Unpaywall só entra para achar PDF **aberto**. Paywall não é baixado."
+)
+search_q = st.text_input(
+    "Tema ou título",
+    placeholder="Ex.: educação inclusiva Brasil  OR  photosynthesis chlorophyll",
+    key="search_query",
+)
+col_a, col_b = st.columns([1, 3])
+with col_a:
+    search_clicked = st.button("Buscar", type="secondary", use_container_width=True)
+with col_b:
+    if not CONTACT_EMAIL:
+        st.caption("Dica: defina CONTACT_EMAIL no `.env` para o Unpaywall achar mais PDFs.")
+
+if search_clicked:
+    if not search_q.strip():
+        st.warning("Digite um tema para buscar.")
+    else:
+        with st.spinner("Consultando Oasisbr / Unpaywall…"):
+            try:
+                hits, note = search_academic(
+                    search_q.strip(),
+                    s2_key=S2_API_KEY,
+                    email=CONTACT_EMAIL,
+                )
+                st.session_state.search_hits = hits
+                st.session_state.search_note = note
+            except Exception as exc:  # noqa: BLE001
+                st.session_state.search_hits = []
+                st.session_state.search_note = ""
+                st.error(f"Falha na busca: {exc}")
+
+hits: list = st.session_state.search_hits
+if hits:
+    note = st.session_state.get("search_note") or "catálogo público"
+    n_oa = sum(1 for h in hits if h.has_open_pdf)
+    st.write(f"{len(hits)} resultado(s) via {note} · {n_oa} com PDF aberto:")
+    for hit in hits:
+        with st.container(border=True):
+            ano = hit.year or "?"
+            st.markdown(f"**{hit.title}** ({ano})")
+            if hit.authors:
+                st.caption(hit.authors)
+            extra = " · ".join(x for x in (hit.venue, hit.source) if x)
+            if extra:
+                st.caption(extra)
+            if hit.doi:
+                st.caption(f"DOI: {hit.doi}")
+            if hit.abstract:
+                st.write(hit.abstract)
+            can_index = ollama_ok and hit.has_open_pdf
+            if not hit.has_open_pdf:
+                st.caption("Sem PDF aberto. Baixe no SciELO/revista e use Enviar PDFs.")
+            if st.button(
+                "Baixar PDF aberto e indexar",
+                key=f"idx-{hit.paper_id}",
+                disabled=not can_index,
+            ):
+                fname = _safe_filename(hit.title, hit.year)
+                if fname in st.session_state.indexed_files:
+                    st.info(f"Já indexado: {fname}")
+                else:
+                    with st.status(f"Obtendo `{fname}`…", expanded=True) as status:
+                        try:
+                            st.write("Resolvendo link de PDF aberto…")
+                            pdf_url = resolve_pdf_url(hit, CONTACT_EMAIL)
+                            if not pdf_url:
+                                raise RuntimeError(
+                                    "Sem PDF em acesso aberto. "
+                                    "Baixe no SciELO/site da revista e use Enviar PDFs."
+                                )
+                            st.write("Baixando…")
+                            dest = download_pdf(pdf_url, PDF_DIR, fname)
+                            st.write("Indexando com Ollama (pode demorar)…")
+                            run_async(index_pdf(dest, settings))
+                            st.session_state.indexed_files.add(dest.name)
+                            status.update(
+                                label=f"Indexado: {dest.name}", state="complete"
+                            )
+                            st.rerun()
+                        except Exception as exc:  # noqa: BLE001
+                            status.update(label="Não foi possível indexar", state="error")
+                            st.error(str(exc))
+elif search_clicked and search_q.strip():
+    st.info("Nenhum artigo encontrado. Tente outras palavras.")
+
 # --- Pergunta ---
-st.subheader("2. Pergunta")
+st.subheader("3. Pergunta")
 question = st.text_area(
     "Digite sua pergunta sobre os documentos",
     placeholder="Ex.: Quais são as principais conclusões do artigo?",
@@ -294,7 +400,7 @@ if ask_clicked:
 # --- Resposta ---
 session = st.session_state.last_answer
 if session is not None:
-    st.subheader("3. Resposta")
+    st.subheader("4. Resposta")
     answer_text = getattr(session, "formatted_answer", None) or getattr(
         session, "answer", str(session)
     )

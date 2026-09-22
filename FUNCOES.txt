@@ -12,9 +12,9 @@ Idioma:  textos nossos em portugues.
 
 O QUE O PROGRAMA FAZ
 --------------------
-Voce envia PDFs, pergunta em portugues, e a IA local
-responde COM BASE NOS ARQUIVOS, com citacoes.
-Nao usa OpenAI. Nao envia documento para a nuvem.
+Voce envia PDFs (ou busca artigos abertos), pergunta em portugues,
+e a IA local responde COM BASE NOS ARQUIVOS, com citacoes.
+Nao usa OpenAI. A leitura do PDF e no PC.
 
 
 BARRA SUPERIOR (status)
@@ -66,7 +66,24 @@ Mensagens:
   "Nenhum PDF indexado ainda."
 
 
-2. PERGUNTA
+2. BUSCAR ARTIGOS (ACESSO ABERTO)
+---------------------------------
+Usa o Oasisbr (IBICT) — API publica, sem chave, sem login.
+Reune SciELO, repositorios e periodicos brasileiros.
+Se o Oasisbr falhar, tenta Semantic Scholar e Crossref.
+Unpaywall so entra para achar PDF livre (pelo DOI).
+Nao precisa de conta do aluno — so CONTACT_EMAIL da escola no .env.
+
+Caixa "Tema ou titulo" + botao Buscar.
+Lista os artigos; o botao de baixar so liga se houver PDF aberto.
+Botao "Baixar PDF aberto e indexar":
+  baixa o PDF legal e manda para o mesmo indice da secao 1.
+Se nao houver PDF aberto: baixe no SciELO e use Enviar PDFs.
+
+Paywall / Elsevier fechado: o programa NAO baixa.
+
+
+3. PERGUNTA
 -----------
 Caixa de texto: escreva em portugues.
 Exemplo: Quais sao as principais conclusoes do artigo?
@@ -85,7 +102,7 @@ BOTAO "Perguntar"
   Pode levar 1 a 3 minutos (ou mais na 1a vez).
 
 
-3. RESPOSTA
+4. RESPOSTA
 -----------
 So aparece depois de uma pergunta com sucesso.
 
@@ -102,7 +119,7 @@ O QUE ESTE PROGRAMA NAO FAZ
 ---------------------------
 - Nao traduz PDF sozinho (pergunta em PT sobre texto em PT ou EN).
 - Nao edita o PDF.
-- Nao busca na internet.
+- Nao baixa artigo de paywall (só PDF em acesso aberto).
 - Nao grava historico de perguntas depois de "Limpar Sessao"
   ou de fechar o navegador.
 - Nao usa chave OpenAI.
@@ -113,7 +130,7 @@ ORDEM DE USO (resumo)
 1. Ollama aberto  (localhost:11434)
 2. streamlit run app.py
 3. Abrir http://localhost:8501
-4. Enviar PDF  -> esperar indexar
+4. Enviar PDF **ou** Buscar artigo aberto e indexar
 5. Perguntar   -> esperar resposta
 6. Abrir "Mostrar Fontes" se quiser conferir
 7. Limpar Sessao para outro conjunto de PDFs

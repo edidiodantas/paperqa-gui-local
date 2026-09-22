@@ -3,11 +3,16 @@
 Este é o caminho certo para o PC da apresentação: **Python + Ollama nativos no SSD**.  
 Não rode o projeto de dentro do pendrive (ele está em exFAT; o `.venv` quebra).
 
+O programa é o **mesmo** do Linux: `app.py` + `academic_search.py` (Oasisbr, SciELO, Unpaywall). Só muda a instalação.
+
 ## 0. Copiar para o SSD
 
-No Explorer: copie a pasta `paperqa-gui-local` do pendrive para, por exemplo:
+No Explorer: copie a pasta **inteira** `paperqa-gui-local` do pendrive para, por exemplo:
 
 `C:\paperqa-gui-local`
+
+Não clone um GitHub antigo: a busca Oasisbr está nesta pasta (`academic_search.py`).  
+Não reutilize o `.env` do Deepin (ele aponta para `/media/.../pqa-linux`). O instalador gera um `.env` do Windows.
 
 Abra o **PowerShell** ou **CMD** nessa pasta.
 
@@ -46,24 +51,16 @@ Na pasta `C:\paperqa-gui-local`:
 install-windows.bat
 ```
 
-Ou, à mão:
+Isso cria o `.venv`, instala as libs (incluindo `httpx` da busca) e gera um `.env` Windows com `OLLAMA_MODEL=qwen3.5:4b`.
 
-```bat
-py -3.12 -m venv .venv
-.venv\Scripts\activate
-python -m pip install --upgrade pip
-pip install torch --index-url https://download.pytorch.org/whl/cpu
-pip install -c constraints-cpu.txt --extra-index-url https://download.pytorch.org/whl/cpu -r requirements.txt
-copy .env.example .env
-```
-
-Edite o `.env` e deixe:
+Edite o `.env` e coloque um **e-mail real da escola**:
 
 ```
 OLLAMA_MODEL=qwen3.5:4b
+CONTACT_EMAIL=seu.email@escola.edu.br
 ```
 
-(O `.env.example` ainda traz 9b; na apresentação comece no 4b.)
+O e-mail é o contato exigido pelo Unpaywall (PDF aberto). Não é conta de aluno.
 
 ## 4. Rodar
 
@@ -71,16 +68,36 @@ Ollama precisa estar aberto. Depois:
 
 ```bat
 cd C:\paperqa-gui-local
+rodar-windows.bat
+```
+
+Ou:
+
+```bat
+cd C:\paperqa-gui-local
 .venv\Scripts\activate
 streamlit run app.py
 ```
 
-Abra http://localhost:8501  
-Faça upload de **um** PDF curto e pergunte. A 1ª resposta pode levar alguns minutos (carga do modelo).
+Abra http://localhost:8501
+
+## 5. O que testar (mesma tela do Linux)
+
+Precisa de **internet** só na seção 2 (Oasisbr / Unpaywall). Ollama e a leitura do PDF são locais.
+
+1. Faixa **verde** no topo: Ollama ok e `qwen3.5:4b` instalado.
+2. **2. Buscar artigos** — tema `educação inclusiva` → Buscar. Deve aparecer Oasisbr (IBICT).
+3. Se o botão **Baixar PDF aberto e indexar** estiver ativo, teste um. Se a SciELO devolver HTML/500, baixe o PDF no site e use **1. Enviar PDFs**.
+4. Envie **um** PDF curto em **1. Enviar PDFs** e espere indexar.
+5. **3. Pergunta** → Perguntar. A 1ª resposta pode levar alguns minutos. Não feche a aba.
+6. Abra **Mostrar Fontes**.
+
+Textos da tela: [FUNCOES.txt](FUNCOES.txt).
 
 ## Não faça
 
 - Não instale `.venv` no pendrive
 - Não use Docker neste PC da viagem (é extra; Python+Ollama já resolvem)
 - Não comece a demo com o modelo 9B sem ter ensaiado
+- Não rode com o `.env` do Linux (`PQA_HOME=/media/...`)
 - Grave um vídeo de backup da tela funcionando

@@ -11,7 +11,7 @@ Para a viagem: **Python + Ollama no SSD do Windows**. Instalar os dois não é p
 Guia passo a passo: **[INSTALAR-WINDOWS.md](INSTALAR-WINDOWS.md)**  
 Funções da tela (TXT): **[FUNCOES.txt](FUNCOES.txt)**
 
-Resumo: copie `paperqa-gui-local` para `C:\paperqa-gui-local` (não rode no pendrive) → Python 3.12 → Ollama → `install-windows.bat` → `ollama pull qwen3.5:4b` → `streamlit run app.py`.
+Resumo: copie `paperqa-gui-local` para `C:\paperqa-gui-local` (não rode no pendrive) → Python 3.12 → Ollama → `install-windows.bat` → `ollama pull qwen3.5:4b` → `rodar-windows.bat`. A tela é a mesma (enviar PDF, buscar Oasisbr, perguntar).
 
 ## MVP opcional: Windows + Docker
 
@@ -99,11 +99,13 @@ Abra o URL local (geralmente http://localhost:8501).
 
 ## Uso
 
-1. Faça upload de PDFs.
+1. Faça upload de PDFs **ou** busque um artigo aberto (seção 2 da tela).
 2. Aguarde a indexação (status na tela — será lento no 9B).
 3. Digite a pergunta e clique em **Perguntar**.
 4. Veja a resposta com citações e abra **Mostrar Fontes**.
 5. Use **Limpar Sessão** na barra lateral para recomeçar.
+
+A busca acadêmica **não pede login do aluno**. Começa no **Oasisbr (IBICT)** — API pública e grátis, com SciELO e repositórios brasileiros. Se o Oasisbr falhar, usa Semantic Scholar/Crossref. O Unpaywall só entra para PDF em acesso aberto. No `.env`: `CONTACT_EMAIL` da escola. Paywall não é baixado. Se não houver PDF aberto, baixe no site da revista e envie na seção 1.
 
 ## Latência esperada
 

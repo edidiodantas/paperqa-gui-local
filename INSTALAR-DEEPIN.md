@@ -95,3 +95,4 @@ bash scripts/desmontar-linux-env.sh
 | Ollama grava em `~/.ollama` | `systemctl stop ollama` e suba com `OLLAMA_MODELS=... ollama serve` |
 | Pedido de OpenAI / GPT-4o | já tratado no `app.py` (llm + summary + agent + enrichment) |
 | Muito lento | `OLLAMA_MODEL=qwen3.5:2b` no `.env` e `ollama pull qwen3.5:2b` |
+| Unpaywall sem PDF | coloque um e-mail real da escola em `CONTACT_EMAIL` no `.env` |
