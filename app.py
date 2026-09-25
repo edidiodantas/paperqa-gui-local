@@ -203,7 +203,7 @@ ollama_ok, ollama_msg = ollama_status()
 # Customização visual
 # ---------------------------------------------------------------------------
 BOOK_SVG = """
-<svg width="42" height="42" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;margin-right:12px;">
+<svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;margin-right:16px;">
   <path d="M12 6.5C10.5 5.5 7.5 4 4 4v12.5c3.5 0 6.5 1 8 2" stroke="#1f77b4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M12 6.5c1.5-1 4.5-2.5 8-2.5v12.5c-3.5 0-6.5 1-8 2" stroke="#1f77b4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M12 6.5v12" stroke="#1f77b4" stroke-width="1.8" stroke-linecap="round"/>
@@ -213,28 +213,53 @@ BOOK_SVG = """
 """
 
 _UBUNTU_CSS = (ROOT / "assets" / "fonts.css").read_text(encoding="utf-8")
-st.markdown(
+st.html(
     f"""
     <style>
     {_UBUNTU_CSS}
     body, body * {{
         font-family: 'Ubuntu', sans-serif !important;
     }}
+    /* Remove o header padrão do Streamlit */
+    header[data-testid="stHeader"] {{
+        display: none !important;
+    }}
+    /* Cola o app no topo da janela */
+    .stApp {{
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }}
+    /* Reduz o padding superior do container principal */
+    .block-container {{
+        padding-top: 0 !important;
+        padding-bottom: 0.5rem !important;
+    }}
+    .main .block-container {{
+        padding-top: 0 !important;
+    }}
     .app-title {{
         display: flex;
         align-items: center;
         font-family: 'Ubuntu', sans-serif !important;
         font-weight: 700 !important;
-        font-size: 2.25rem;
+        font-size: 4.2rem;
         color: #1f77b4;
-        margin-bottom: 0.2rem;
+        margin-top: 0;
+        margin-bottom: 0.15rem;
+        line-height: 1;
     }}
     .app-title svg {{
         flex-shrink: 0;
+        width: 90px;
+        height: 90px;
+    }}
+    /* Deixa o caption colado no título */
+    .stCaption {{
+        margin-top: -0.25rem !important;
+        margin-bottom: 0.35rem !important;
     }}
     </style>
-    """,
-    unsafe_allow_html=True,
+    """
 )
 
 st.markdown(
