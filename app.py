@@ -217,8 +217,12 @@ st.html(
     f"""
     <style>
     {_UBUNTU_CSS}
-    body, body * {{
-        font-family: 'Ubuntu', sans-serif !important;
+    /* Fonte Ubuntu para textos, sem sobrescrever ícones Material */
+    body {{
+        font-family: 'Ubuntu', sans-serif;
+    }}
+    [data-testid="stIconMaterial"] {{
+        font-family: 'Material Symbols Rounded' !important;
     }}
     /* Remove o header padrão do Streamlit */
     header[data-testid="stHeader"] {{
