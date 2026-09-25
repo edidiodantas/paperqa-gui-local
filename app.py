@@ -15,6 +15,7 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+import re
 import urllib.error
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
@@ -298,6 +299,8 @@ with col_b:
 if search_clicked:
     if not search_q.strip():
         st.warning("Digite um tema para buscar.")
+        st.session_state.search_hits = []
+        st.session_state.search_note = ""
     else:
         with st.spinner("Consultando Oasisbr / Unpaywall…"):
             try:
@@ -318,7 +321,7 @@ if hits:
     note = st.session_state.get("search_note") or "catálogo público"
     n_oa = sum(1 for h in hits if h.has_open_pdf)
     st.write(f"{len(hits)} resultado(s) via {note} · {n_oa} com PDF aberto:")
-    for hit in hits:
+    for i, hit in enumerate(hits):
         with st.container(border=True):
             ano = hit.year or "?"
             st.markdown(f"**{hit.title}** ({ano})")
@@ -334,9 +337,10 @@ if hits:
             can_index = ollama_ok and hit.has_open_pdf
             if not hit.has_open_pdf:
                 st.caption("Sem PDF aberto. Baixe no SciELO/revista e use Enviar PDFs.")
+            btn_key = f"idx-{i}_{re.sub(r'[^a-zA-Z0-9_-]', '_', (hit.paper_id or hit.doi or hit.title))[:50]}"
             if st.button(
                 "Baixar PDF aberto e indexar",
-                key=f"idx-{hit.paper_id}",
+                key=btn_key,
                 disabled=not can_index,
             ):
                 fname = _safe_filename(hit.title, hit.year)
