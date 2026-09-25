@@ -199,7 +199,48 @@ init_session_state()
 settings = get_settings()
 ollama_ok, ollama_msg = ollama_status()
 
-st.title("AcervoQA")
+# ---------------------------------------------------------------------------
+# Customização visual
+# ---------------------------------------------------------------------------
+BOOK_SVG = """
+<svg width="42" height="42" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;margin-right:12px;">
+  <path d="M12 6.5C10.5 5.5 7.5 4 4 4v12.5c3.5 0 6.5 1 8 2" stroke="#1f77b4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12 6.5c1.5-1 4.5-2.5 8-2.5v12.5c-3.5 0-6.5 1-8 2" stroke="#1f77b4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12 6.5v12" stroke="#1f77b4" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M12 18.5c-1.5-1-4.5-2-8-2" stroke="#1f77b4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12 18.5c1.5-1 4.5-2 8-2" stroke="#1f77b4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+"""
+
+_UBUNTU_CSS = (ROOT / "assets" / "fonts.css").read_text(encoding="utf-8")
+st.markdown(
+    f"""
+    <style>
+    {_UBUNTU_CSS}
+    body, body * {{
+        font-family: 'Ubuntu', sans-serif !important;
+    }}
+    .app-title {{
+        display: flex;
+        align-items: center;
+        font-family: 'Ubuntu', sans-serif !important;
+        font-weight: 700 !important;
+        font-size: 2.25rem;
+        color: #1f77b4;
+        margin-bottom: 0.2rem;
+    }}
+    .app-title svg {{
+        flex-shrink: 0;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    f'<div class="app-title">{BOOK_SVG}AcervoQA</div>',
+    unsafe_allow_html=True,
+)
 st.caption("Pesquisa e leitura de artigos científicos no seu computador.")
 st.caption(
     f"Modelo: `{OLLAMA_MODEL}` · Embeddings: `{EMBEDDING_MODEL}` · "
