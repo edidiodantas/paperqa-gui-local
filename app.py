@@ -257,11 +257,6 @@ st.html(
         width: 90px;
         height: 90px;
     }}
-    /* Deixa o caption colado no título */
-    .stCaption {{
-        margin-top: -0.25rem !important;
-        margin-bottom: 0.35rem !important;
-    }}
     </style>
     """
 )
@@ -443,10 +438,9 @@ elif search_clicked and search_q.strip():
 
 # --- Pergunta ---
 st.subheader("3. Pergunta")
-question = st.text_area(
+question = st.text_input(
     "Digite sua pergunta sobre os documentos",
     placeholder="Ex.: Quais são as principais conclusões do artigo?",
-    height=100,
 )
 
 ask_clicked = st.button(
